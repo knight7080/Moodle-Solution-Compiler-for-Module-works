@@ -1,0 +1,11 @@
+Things To Rectify:
+    navigates into all the "instancename" tag (Ex. In 6th module java)
+    Code window scroll to get all the code-answer contents
+    To properly navigate into the given course name and not just the semi-pattern of the course name
+
+
+features to add:
+    Getting credentials
+    Through warning that file already exists or file not found
+    Headless browsing -- in the background action
+    Add OOPS concept?

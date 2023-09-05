@@ -2,7 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+from selenium.webdriver import Keys
 import time
+import merger
 from fpdf import FPDF
 
 import pdfkit
@@ -12,8 +14,9 @@ driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())
 
 driver.get("http://training.saveetha.in/login/index.php")
 
-rno = "21003975"
-pas = "h85153"
+rno = "21000045"
+pas = "t65363"
+mod_name = "TT JAVA MODULE-VI"
 u_btn = driver.find_element(By.NAME,"username")
 u_btn.send_keys(rno)
 p_btn = driver.find_element(By.NAME,"password")
@@ -24,41 +27,48 @@ time.sleep(10)
 
 driver.find_element(By.XPATH,"//span[contains(.,'TT JAVA MODULE-VII')]").click()
 
-mods = driver.find_elements(By.XPATH,"//li[@class='activity quiz modtype_quiz ']")
+quant = driver.find_elements(By.XPATH, "//li[@class='activity quiz modtype_quiz ']")
 
-m = mods[0].find_elements(By.CLASS_NAME,"instancename")
+l = len(quant)
 
-cont = len(m)
-m[0].click()
+for j in range(l):
+        mods = driver.find_elements(By.XPATH, "//li[@class='activity quiz modtype_quiz ']")
+        m = mods[j].find_elements(By.CLASS_NAME, "instancename")
+        m[0].click()
 
-try:
-    atmpt = driver.find_element(By.XPATH, "//tr[@class = 'bestrow lastrow']")
+        try:
+            atmpt = driver.find_element(By.XPATH, "//tr[@class = 'bestrow lastrow']")
 
-    atmpt.find_element(By.TAG_NAME, "a").click()
+            atmpt.find_element(By.TAG_NAME, "a").click()
 
-except:
-    atmpt = driver.find_element(By.XPATH, "//tr[@class = 'lastrow']")
+        except:
+            atmpt = driver.find_element(By.XPATH, "//tr[@class = 'lastrow']")
 
-    atmpt.find_element(By.TAG_NAME, "a").click()
+            atmpt.find_element(By.TAG_NAME, "a").click()
 
+        page = driver.page_source.encode('utf-8')
 
-page = driver.page_source.encode('utf-8')
+        file = open('result.html', 'wb')
 
-file = open('result.html','wb')
+        file.write(page)
 
-file.write(page)
+        file.close()
 
-file.close()
+        config = pdfkit.configuration(wkhtmltopdf="C:\Program Files\wkhtmltopdf\\bin\wkhtmltopdf.exe")
 
-config = pdfkit.configuration(wkhtmltopdf="C:\Program Files\wkhtmltopdf\\bin\wkhtmltopdf.exe")
+        op_file = 'output' + str(j)  + '.pdf'
 
-pdfkit.from_file('result.html', 'output.pdf', configuration = config)
+        pdfkit.from_file('result.html', op_file , configuration=config)
 
-driver.back()
+        time.sleep(2)
 
-time.sleep(2)
+        driver.back()
 
-driver.back()
+        time.sleep(2)
+
+        driver.back()
+
+merger.merge_pdfs(l,mod_name)
 
 time.sleep(2)
 driver.close()

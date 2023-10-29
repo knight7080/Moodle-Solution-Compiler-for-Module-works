@@ -11,11 +11,10 @@ chrome_driver_path = 'C:/path/to/chromedriver.exe'
 # Set Chrome options for headless mode and to disable printing prompts
 chrome_options = Options()
 chrome_options.add_argument('--headless')
-chrome_options.add_argument('--print-to-pdf=output.pdf')
 # Specify the ChromeDriver executable path in the service
 
 # Create a Chrome WebDriver instance using the service and options
-driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
 
 # Navigate to the webpage you want to save as PDF
 driver.get('https://google.com')

@@ -5,20 +5,22 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver import Keys
 import time
 import merger
-from fpdf import FPDF
 from selenium.webdriver.chrome.options import Options
 import pdfkit
 
 chrome_options = Options()
-chrome_options.add_argument('--headless')
+# chrome_options.add_argument('--headless')  // run this for executing in the backend without a visible window
 
-driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
+
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()),options=chrome_options
+
+                          )
 
 driver.get("http://training.saveetha.in/login/index.php")
 
-rno = "21003975"
-pas = "h85153"
-mod_name = "TT JAVA MODULE-VI"
+rno = "21000045"
+pas = "t65363"
+mod_name = "TT Module - XII"
 u_btn = driver.find_element(By.NAME,"username")
 u_btn.send_keys(rno)
 p_btn = driver.find_element(By.NAME,"password")
@@ -33,7 +35,11 @@ driver.find_element(By.XPATH,"//a[text()='" + mod_name + "']").click()
 
 quant = driver.find_elements(By.XPATH, "//li[@class='activity quiz modtype_quiz ']")
 
+wkhtmltopdf_options = {"enable-local-file-access": ""}
+
 l = len(quant)
+
+log = {}
 
 for j in range(l):
         mods = driver.find_elements(By.XPATH, "//li[@class='activity quiz modtype_quiz ']")
@@ -64,7 +70,7 @@ for j in range(l):
             op_file = r'C:\Users\kaushik\PycharmProjects\moodle_doc\venv\output' + str(j) + '.pdf'
 
             pdfkit.from_file(r'C:\Users\kaushik\PycharmProjects\moodle_doc\venv\result.html', op_file,
-                             options={"enable-local-file-access": ""}, verbose=True)
+                             options=wkhtmltopdf_options, verbose=True)
         except:
             driver.back()
             continue

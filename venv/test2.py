@@ -16,8 +16,17 @@ content = driver.find_elements(By.CLASS_NAME,"content")
 log = {}
 
 for i in range(0,len(content)-1):
-    q = l[i].find_elements(By.TAG_NAME,'p')
-    r = l[i].find_elements(By.XPATH, "//textarea[@class='coderunner-answer edit_code']")
+    q = content[i].find_elements(By.TAG_NAME,'p')
+    print(len(q))
+    for l in q:
+        try:
+            if(len(l.text)>0):
+                Q = l.text
+                break
+        except:
+            pass
+    print(Q)
+    r = content[i].find_elements(By.XPATH, "//textarea[@class='coderunner-answer edit_code']")
     Q = q[0].text
     A = r[i].get_attribute("value")
     log[Q] = A
@@ -35,7 +44,7 @@ for i in range(0,len(content)-1):
 # print(l)
 #
 # print(len(l))
-print(log)
+# print(log)
 time.sleep(10)
 
 driver.close()
